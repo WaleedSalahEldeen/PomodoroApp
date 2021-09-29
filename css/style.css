@@ -18,6 +18,12 @@ body {
   --primaryColor: #ff6666;
 }
 
+@media all and (min-width: 768px) {
+.container {
+    transform: translatey(10%);
+}
+}
+
 .container > h1 {
   color: #eee;
   text-align: center;
@@ -300,6 +306,9 @@ body {
 }
 
 @media all and (max-width: 767px) {
+  .btn-settings {
+  margin-bottom: 30px;
+  }
   .pop-settings {
     width: 82%;
     text-align: center;
