@@ -57,14 +57,14 @@ const setTimer = (time = 25) => {
 setTimer(25);
 const countDown = () => {
   let [minute, second] = timer.textContent.split(":");
-  if (second <= 11 && second % 2 !== 0) {
+  if (second <= 11 && second % 2 !== 0 && minute === "00") {
     timer.style.color = "red";
     pause.style.color = "red";
   } else {
     timer.style.color = "#eee";
     pause.style.color = "#eee";
   }
-  if (second == 3) audio.play();
+  if (second == 3 && minute === "00") audio.play();
   if (clockPrecent == 0) {
     clockPrecent = 100 / (minute * 60);
   }
