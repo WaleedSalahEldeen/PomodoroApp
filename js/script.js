@@ -108,9 +108,11 @@ clock.addEventListener("click", function () {
       pause.innerHTML = 'pause <i class="fas fa-pause"></i>';
       countDownInt = setInterval(countDown, 1000);
     }
-  } else {
-    if (pause.textContent == "restart ")
+  } else if (pause.textContent == "restart ") {
       document.querySelector("h3.active").click();
+     pause.innerHTML = 'start <i class="fas fa-play"></i>';
+  }
+  else {
     pause.innerHTML = 'pause <i class="fas fa-pause"></i>';
     countDownInt = setInterval(countDown, 1000);
   }
