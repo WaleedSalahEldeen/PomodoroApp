@@ -306,10 +306,17 @@ body {
 }
 
 @media all and (max-width: 767px) {
+  .time {
+  margin:10px 0;
+  } 
+  .font-contain, .color-contain {
+  padding:15px 0;
+  }
   .btn-settings {
   margin-bottom: 30px;
   }
   .pop-settings {
+    margin-top: 40px;
     width: 82%;
     text-align: center;
   }
