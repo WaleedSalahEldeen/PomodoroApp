@@ -9,47 +9,18 @@ let timer = document.querySelector(".timer");
 let closeSettings = document.querySelector(".pop-settings .main-header span ");
 let clock = document.querySelector(".clock");
 let pause = document.querySelector(".pause");
-let pmodoroStyle = document.querySelector(".select-style h3:nth-of-type(1)");
-let shortStyle = document.querySelector(".select-style h3:nth-of-type(2)");
-let longStyle = document.querySelector(".select-style h3:nth-of-type(3)");
-let pomodoroInput = document.querySelector("#pomodoro");
-let longInput = document.querySelector("#long");
-let shortInput = document.querySelector("#short");
+let styles = document.querySelector(".select-style");
 let audio = document.querySelector(".audio");
 let circle = document.querySelector(".clock svg circle:nth-of-type(2)");
-let boldFont = document.querySelector(
-  ".font-contain .fonts span:nth-of-type(1)"
-);
-let medFont = document.querySelector(
-  ".font-contain .fonts span:nth-of-type(2)"
-);
-let regFont = document.querySelector(
-  ".font-contain .fonts  span:nth-of-type(3)"
-);
-let redColor = document.querySelector(
-  ".color-contain .color span:nth-of-type(1)"
-);
-let cyanColor = document.querySelector(
-  ".color-contain .color span:nth-of-type(2)"
-);
-let purpleColor = document.querySelector(
-  ".color-contain .color  span:nth-of-type(3)"
-);
+let colorContain = document.querySelector(".color-contain .color");
+let fontContain = document.querySelector(".font-contain .fonts");
 let root = document.documentElement;
 // get settings
-let pTime,
-  sTime,
-  lTime,
+let curTime,
   font = "bold",
   clockCounter = 100,
   clockPrecent = 0,
   color = "#ff6666";
-function getSettings() {
-  pTime = Number(pomodoroInput.value);
-  sTime = Number(shortInput.value);
-  lTime = Number(longInput.value);
-}
-getSettings();
 //timer all related
 const setTimer = (time = 25) => {
   timer.textContent = `${String(time).padStart(2, "0")}:00`;
@@ -109,10 +80,9 @@ clock.addEventListener("click", function () {
       countDownInt = setInterval(countDown, 1000);
     }
   } else if (pause.textContent == "restart ") {
-      document.querySelector("h3.active").click();
-     pause.innerHTML = 'start <i class="fas fa-play"></i>';
-  }
-  else {
+    document.querySelector("h3.active").click();
+    pause.innerHTML = 'start <i class="fas fa-play"></i>';
+  } else {
     pause.innerHTML = 'pause <i class="fas fa-pause"></i>';
     countDownInt = setInterval(countDown, 1000);
   }
@@ -126,78 +96,35 @@ let circleDefult = function () {
   pause.style.color = "#eee";
 };
 //change style
-shortStyle.addEventListener("click", function () {
-  pmodoroStyle.classList.remove("active");
-  longStyle.classList.remove("active");
-  shortStyle.classList.add("active");
-  getSettings();
-  clearInterval(countDownInt);
-  setTimer(sTime);
-  pause.innerHTML = 'start <i class="fas fa-play"></i>';
-  circleDefult();
-});
-pmodoroStyle.addEventListener("click", function () {
-  shortStyle.classList.remove("active");
-  longStyle.classList.remove("active");
-  pmodoroStyle.classList.add("active");
-  getSettings();
-  clearInterval(countDownInt);
-  setTimer(pTime);
-  pause.innerHTML = 'start <i class="fas fa-play"></i>';
-  circleDefult();
-});
-longStyle.addEventListener("click", function () {
-  pmodoroStyle.classList.remove("active");
-  shortStyle.classList.remove("active");
-  longStyle.classList.add("active");
-  getSettings();
-  clearInterval(countDownInt);
-  setTimer(lTime);
-  pause.innerHTML = 'start <i class="fas fa-play"></i>';
-  circleDefult();
+styles.addEventListener("click", function (e) {
+  if (e.target.tagName === "H3") {
+    activeClass(e);
+    clearInterval(countDownInt);
+    curTime = document.querySelector(`#${e.target.dataset.time}`).value;
+    setTimer(curTime);
+    pause.innerHTML = 'start <i class="fas fa-play"></i>';
+    circleDefult();
+  }
 });
 // change settings and apply
 btnApply.addEventListener("click", function () {
   document.querySelector("h3.active").click();
-  if (regFont.classList.contains("active")) font = "100";
-  else if (medFont.classList.contains("active")) font = "500";
-  else font = "700";
+  color = getComputedStyle(
+    colorContain.querySelector(".active")
+  ).backgroundColor;
+  font = getComputedStyle(fontContain.querySelector(".active")).fontWeight;
   body.style.fontWeight = font;
-  if (redColor.classList.contains("active")) color = "#ff6666";
-  else if (cyanColor.classList.contains("active")) color = "#1ab905";
-  else color = "#d683f9";
   root.style.setProperty("--primaryColor", color);
   showHideSettings();
 });
-//font change
-boldFont.addEventListener("click", function () {
-  regFont.classList.remove("active");
-  medFont.classList.remove("active");
-  boldFont.classList.add("active");
-});
-regFont.addEventListener("click", function () {
-  boldFont.classList.remove("active");
-  medFont.classList.remove("active");
-  regFont.classList.add("active");
-});
-medFont.addEventListener("click", function () {
-  regFont.classList.remove("active");
-  boldFont.classList.remove("active");
-  medFont.classList.add("active");
-});
-//change color
-cyanColor.addEventListener("click", function () {
-  redColor.classList.remove("active");
-  purpleColor.classList.remove("active");
-  cyanColor.classList.add("active");
-});
-redColor.addEventListener("click", function () {
-  cyanColor.classList.remove("active");
-  purpleColor.classList.remove("active");
-  redColor.classList.add("active");
-});
-purpleColor.addEventListener("click", function () {
-  redColor.classList.remove("active");
-  cyanColor.classList.remove("active");
-  purpleColor.classList.add("active");
-});
+//font + color change
+const activeClass = function (e) {
+  if (e.target.tagName === "SPAN" || e.target.tagName === "H3") {
+    [...e.target.parentElement.children].forEach((child) => {
+      child.classList.remove("active");
+    });
+    e.target.classList.add("active");
+  }
+};
+fontContain.addEventListener("click", activeClass);
+colorContain.addEventListener("click", activeClass);
